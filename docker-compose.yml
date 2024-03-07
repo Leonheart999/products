@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  postgres_dev_aid:
+    container_name: 'postgres_dev_aid'
+    restart: 'always'
+    image: dev_aid/postgres
+    build: docker/postgres
+    ports:
+      - "5433:5432"
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "5"
+  devaid-product-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_dev_aid
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_dev_aid:5432/devaid
+      SPRING_DATASOURCE_USERNAME: levan
+      SPRING_DATASOURCE_PASSWORD: q1w2e3r4t5y6
