@@ -6,6 +6,8 @@ create table products
     name varchar
         constraint product_name_pk
             unique not null ,
+    price     decimal,
+    quantity  Integer,
     active     boolean default true
 );
 alter table products

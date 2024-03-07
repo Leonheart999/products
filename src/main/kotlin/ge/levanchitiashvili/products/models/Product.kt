@@ -3,6 +3,7 @@ package ge.levanchitiashvili.products.models
 import jakarta.persistence.*
 import lombok.Data
 import lombok.experimental.FieldNameConstants
+import java.math.BigDecimal
 
 @Entity
 @Table(name = "products")
@@ -16,6 +17,24 @@ data class Product(
         var id: Long,
         @Column(name = "name")
         var name: String,
+        @Column(name = "quantity")
+        var quantity: Int,
+        @Column(name = "price")
+        var price: BigDecimal,
         @Column(name = "active")
         var active: Boolean
-)
+) {
+    companion object {
+        @JvmField
+        val ACTIVE: String = "active"
+
+        @JvmField
+        val NAME: String = "name"
+
+        @JvmField
+        val PRICE: String = "price"
+
+        @JvmField
+        val QUANTITY: String = "quantity"
+    }
+}

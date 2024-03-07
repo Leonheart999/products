@@ -15,12 +15,14 @@ import java.util.*
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig  {
+class WebSecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-                .csrf().disable().formLogin { withDefaults() }
+                .csrf().disable().authorizeHttpRequests { cust ->
+                    cust.anyRequest().authenticated()
+                }.formLogin { withDefaults() }
                 .build()
     }
 

@@ -10,6 +10,6 @@ import java.util.*
 @Repository
 interface ProductRepository : JpaRepository<Product,Long>, JpaSpecificationExecutor<Product>{
     fun findByIdAndActiveTrue(id: Long): Optional<Product>
-    fun findByActiveTrue(active: Boolean): List<Product>
+//    fun findByActiveTrue(active: Boolean): List<Product>
 
 }

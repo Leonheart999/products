@@ -1,10 +1,11 @@
 package ge.levanchitiashvili.products.services
 
 import ge.levanchitiashvili.products.models.Product
+import java.math.BigDecimal
 
 interface ProductService {
 
-    fun getProducts(active: Boolean): List<Product>
+    fun getProducts(name: String?, price: BigDecimal?, quantity: Int?, active: Boolean): List<Product>
 
     fun getProduct(id: Long): Product
 
