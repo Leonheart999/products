@@ -9,7 +9,6 @@ import java.math.BigDecimal
 @Table(name = "products")
 @FieldNameConstants
 @SequenceGenerator(name = "productsIdSeq", sequenceName = "products_id_seq", allocationSize = 1)
-@Data
 data class Product(
         @Id
         @GeneratedValue(generator = "productsIdSeq", strategy = GenerationType.SEQUENCE)

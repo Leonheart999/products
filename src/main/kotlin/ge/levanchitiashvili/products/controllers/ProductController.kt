@@ -1,7 +1,10 @@
 package ge.levanchitiashvili.products.controllers
 
-import ge.levanchitiashvili.products.models.Product
+import com.sun.org.slf4j.internal.Logger
+import com.sun.org.slf4j.internal.LoggerFactory
+import ge.levanchitiashvili.products.dtos.ProductDTO
 import ge.levanchitiashvili.products.services.ProductService
+import jakarta.validation.Valid
 import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,35 +20,42 @@ import java.math.BigDecimal
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-class ProductController(private final val productService: ProductService) {
-
+class ProductController(val productService: ProductService) {
+     val logger : Logger = LoggerFactory.getLogger(ProductController::class.java)
     @GetMapping
     fun getAll(@RequestParam(required = false) name: String?,
                @RequestParam(required = false) price: BigDecimal?,
                @RequestParam(required = false) quantity: Int?,
-               @RequestParam(required = false, defaultValue = "true") active: Boolean): List<Product> {
-        val products :List<Product> = productService.getProducts(name, price, quantity, active)
-        return products
+               @RequestParam(required = false, defaultValue = "true") active: Boolean): List<ProductDTO> {
+        logger.debug("name= $name  price= $price quantity=$quantity  active $active" )
+        return productService.entityToDTOList(productService.getProducts(name, price, quantity, active))
+
     }
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): Product {
-        return productService.getProduct(id);
+    fun get(@PathVariable id: Long): ProductDTO? {
+        logger.debug("id= $id" )
+
+        return productService.entityToDTO(productService.getProduct(id))
     }
 
 
     @PostMapping
-    fun add(@RequestBody product: Product): Product? {
-        return productService.save(product);
+    fun add(@RequestBody @Valid product: ProductDTO): ProductDTO? {
+        logger.debug("product= $product" )
+
+        return productService.entityToDTO(productService.saveDTO(product))
     }
 
     @PutMapping("{id}")
-    fun edit(@PathVariable id: Long, @RequestBody product: Product): Product {
-        return productService.edit(id, product)
+    fun edit(@PathVariable id: Long, @RequestBody @Valid product: ProductDTO): ProductDTO? {
+        logger.debug(" id= $id  product= $product" )
+        return productService.entityToDTO(productService.edit(id, product))
     }
 
     @DeleteMapping("{id}")
     fun delete(@PathVariable id: Long, @RequestParam(required = false, defaultValue = "true") softDelete: Boolean) {
+        logger.debug(" id= $id  softDelete= $softDelete" )
         productService.delete(id, softDelete)
     }
 
